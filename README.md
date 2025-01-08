@@ -17,24 +17,29 @@ This project involves using an AWS Lambda function to copy an object from one S3
 
 ### 2. **Write Lambda Function Code**
 
-The Python code to be used for the Lambda function is available in the script file `copy_obj.py`. The script performs the following tasks:
+The Python code to be used for the Lambda function is available in the script file `copyObj.py`. The script performs the following tasks:
 
 - **Extract the source bucket name and object key** from the incoming S3 event.
 - **Check if the object exists** in the source bucket using the `head_object` method.
 - **Copy the object** to the destination bucket using the `copy_object` method.
 - Handles **errors** like `NoSuchKey` in case the object doesn't exist in the source bucket.
 
-You can download the full code from the file `copy_obj.py` and upload it to your Lambda function.
+You can download the full code from the file `copyObj.py` and upload it to your Lambda function.
+
+- Upload code goto code option-> paste your `copyObj.py`code -> click on Deploy.
 
 ### 3. **Set IAM Role Permissions**
 
-Ensure that the Lambda function's execution role has the following permissions:
+Ensure that the Lambda function's execution role `Lambda_s3_role` has the following permissions:
 - `s3:GetObject` for the source bucket.
 - `s3:PutObject` for the destination bucket.
 
-Example of a minimal IAM policy for Lambda permissions:
+Attcah `Lambda_s3_role` to your lambda function (Configuration -> permissions -> executionrole -> edit-> selct your role)
 
-### 4. **Configure S3 Event Notification**
+### 4. **Create s3 buckets**
+
+
+### 5. **Configure S3 Event Notification**
 
 1. Go to the **source S3 bucket** in the [S3 Console](https://console.aws.amazon.com/s3/).
 2. Under the **Properties** tab, scroll to **Event notifications** and click **Create event notification**.
@@ -46,13 +51,13 @@ Example of a minimal IAM policy for Lambda permissions:
 
 The source bucket will now automatically trigger the Lambda function whenever an object is uploaded.
 
-### 5. **Test the Lambda Function**
+### 6. **Test the Lambda Function**
 
 1. **Upload an Object**: Upload a file to the source S3 bucket to trigger the event.
 2. **Verify the Copy**: Check the destination bucket to ensure the object is copied.
 3. **Check Logs**: If there are issues, view the logs in the [CloudWatch Console](https://console.aws.amazon.com/cloudwatch/) under the Lambda function’s log group for debugging.
 
-### 6. **Optional: Enable S3 Logging**
+### 7. **Optional: Enable S3 Logging**
 
 You can enable **server access logging** for the source S3 bucket to track any errors related to the event notification.
 
@@ -70,4 +75,4 @@ You can enable **server access logging** for the source S3 bucket to track any e
 
 This setup allows you to automatically copy objects between S3 buckets using a Lambda function triggered by object uploads. Make sure to handle permissions and ensure the object key is correct when troubleshooting issues.
 
-The Lambda function code is available in the file `copy_obj.py`. Please upload this file to your Lambda function to make this process work.
+The Lambda function code is available in the file `copyObj.py`. Please upload this file to your Lambda function to make this process work.
