@@ -15,7 +15,8 @@ This guide describes how to restrict AWS users to only create EC2 instances of t
 You will define a custom policy that allows users to create EC2 instances only of the type `t2.medium` and denies `t3.medium`.
 
 ### Policy JSON
-Use the policy.JSON to create your policy. This policy allows users to perform EC2 `RunInstances` actions, but only for `t2.medium` instances, and explicitly denies the creation of `t3.medium` instances.
+Use the `policy.json` to create your policy. This policy allows users to perform EC2 `RunInstances` actions, but only for `t2.medium` instances, and explicitly denies the creation of `t3.medium` instances.
+And aditionally user need have basic permission to create instance. that available in `basicPolicy.json`
 # EC2 Instance Type Restriction: Review, Testing, and Optional Steps
 
 ## Step 4: Review and Create Policy
@@ -53,4 +54,27 @@ You can monitor attempts to launch `t3.medium` instances by checking **CloudTrai
 4. Look for any denied actions related to instance type creation.
 
 ## Step 8: Optional - Creating a Custom Role for EC2 Access
-If you want to restrict a specific role (for
+If you want to restrict a specific role 
+1. Go to **IAM > Roles**.
+2. Click **Create role**.
+3. Select **AWS service** and choose **EC2** as the trusted entity.
+4. Attach the previously created policy (`AllowOnlyT2MediumInstances`) to the role.
+5. Name the role (e.g., `EC2InstanceCreationRole`).
+6. Complete the role creation and attach it to the desired EC2 instance.
+
+## Step 9: Optional - Use AWS Organizations for Account-wide Enforcement
+If you're using **AWS Organizations** to manage multiple accounts, you can create the same policy at the organization level to enforce this rule across multiple accounts.
+
+1. In **AWS Organizations**, create a new **Service Control Policy (SCP)**.
+2. Attach the SCP to the organizational unit (OU) or accounts you want to restrict.
+3. Ensure the policy includes the same deny rule for `t3.medium`.
+
+## Notes:
+- You can modify this policy to allow more instance types or further restrict which types can be launched.
+- Make sure to test thoroughly in a staging environment before applying it in production.
+- Use **CloudTrail** for auditing and to monitor denied actions.
+- If you need to update the policy later, ensure you update it in IAM and reattach it as necessary.
+
+---
+
+By following the above steps, you can successfully restrict users to creating only `t2.medium` EC2 instances and prevent them from creating `t3.medium` instances in your AWS account.
